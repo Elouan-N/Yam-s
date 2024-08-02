@@ -4,18 +4,29 @@ from constantes import *
 class Coup:
     coups = []  # Tous les coups possibles
 
-    def __init__(self, nom, restrictions) -> None:
-        self.restrictions = restrictions
+    def __init__(self, nom, restrictions, score) -> None:
+        self._restrictions = restrictions
+        self._score = score
         self.nom = nom
         Coup.coups.append(self)
 
     def est_possible(self, des: list[int]) -> bool:
         """Renvoie un booléen indiquant si le lancer de dés correspond au coup"""
-        pass
+        match self._restrictions["type"]:
+            case "n_of_a_kind":
+                return self._restrictions["kind"] in des
+            case "variable":
+                pass
+            case _:
+                return True
 
     def score(self, des: list[int]) -> int:
         """Prend en paramètre un lancer de dés correspondant au coup, et renvoie le score obtenu pour ce coup"""
-        pass
+        match self._score["type"]:
+            case "somme":
+                return sum(des)
+            case "somme partielle":
+                return sum(filter(lambda x: x == self._score["kind"], des))
 
     @classmethod
     def coups_possibles(cls, des: list[int]):
@@ -35,4 +46,4 @@ class Coup:
 def init_logique():
     # On crée les instances de coup
     for k, restr in restrictions.items():
-        Coup(k, restr)
+        Coup(k, restr, scores[k])
