@@ -16,7 +16,13 @@ class Coup:
             case "n_of_a_kind":
                 return self._restrictions["kind"] in des
             case "variable":
-                pass
+                return self._restrictions["function"](des)
+            case "contains":
+                for c in self._restrictions["contents"]:
+                    if est_inclus(list(map(int, c)), des):
+                        return True
+                return False
+
             case _:
                 return True
 
@@ -27,6 +33,8 @@ class Coup:
                 return sum(des)
             case "somme partielle":
                 return sum(filter(lambda x: x == self._score["kind"], des))
+            case "fixed":
+                return self._score["value"]
 
     @classmethod
     def coups_possibles(cls, des: list[int]):
