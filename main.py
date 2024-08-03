@@ -6,28 +6,15 @@ from random import randint
 joueurs = []
 
 
-class Joueur:
-    def __init__(self, nom) -> None:
-        self.nom = nom
-        self.scores = {k: None for k in restrictions.keys()}
-        self.score_inf = 0
-        self.score_sup = 0
-        self.score_total = 0
-
-    def __str__(self) -> str:
-        return self.nom
-
-    def __repr__(self) -> str:
-        return str(self)
-
-
 def init_partie():
     init_logique()
     init_graphisme()
 
 
 def finir_partie():
-    pass
+    for j in joueurs:
+        j.calculer_scores()
+    afficher_podium(joueurs)
 
 
 def tirage(n: int) -> list[int]:
@@ -36,6 +23,7 @@ def tirage(n: int) -> list[int]:
     for _ in range(n):
         des_tires.append(randint(1, 6))
     return des_tires
+
 
 def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[int]:
     """Renvoie la liste de dés à garder choisis par le joueur"""
@@ -51,7 +39,7 @@ def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[in
 
 def get_veut_s_arreter() -> bool:
     """Renvoie un booléen indiquant si le joueur veut s'arrêter"""
-    if input("Voulez-vous vous arrêter là? (y/N)\n>>> ") in ("y","Y"):
+    if input("Voulez-vous vous arrêter là? (y/N)\n>>> ") in ("y", "Y"):
         return True
     return False
 
