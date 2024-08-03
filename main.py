@@ -46,7 +46,7 @@ def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[in
         ),
         des_conserves + des_tires,
     ):
-        print("\033[1;34mChoix impossible, veuillez réessayer")
+        print("\033[1;31;1mChoix impossible, veuillez réessayer\033[1;0m")
     return des_conserves_choisis
 
 
