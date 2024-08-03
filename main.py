@@ -36,7 +36,6 @@ def tirage(n: int) -> list[int]:
     for _ in range(n):
         des_tires.append(randint(1, 6))
     return des_tires
-bla=1
 
 def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[int]:
     """Renvoie la liste de dés à garder choisis par le joueur"""
@@ -51,7 +50,7 @@ def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[in
 
 
 def get_veut_s_arreter() -> bool:
-    if input("Voulez-vous vous arrêter là? (y/N)\n>>> ") == "y":
+    if input("Voulez-vous vous arrêter là? (y/N)\n>>> ") in ("y","Y"):
         return True
     return False
 
@@ -65,7 +64,7 @@ def jouer(iTour: int, joueur: Joueur) -> None:
     for iLance in range(3):
         des_tires = tirage(5 - len(des_conserves))
         afficher_des(des_conserves, des_tires)
-        if iLance != 3 and not get_veut_s_arreter():
+        if iLance < 2 and not get_veut_s_arreter():
             # Le joueur enlève ou met des dés de côté
             des_conserves = get_des_conserves(des_conserves, des_tires)
         else:
