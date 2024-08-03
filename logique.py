@@ -37,7 +37,7 @@ class Coup:
                 return self._score["value"]
 
     @classmethod
-    def coups_possibles(cls, des: list[int]):
+    def coups_possibles(cls, des: list[int]) -> list['Coup']:
         c_pos = []
         for c in Coup.coups:
             if c.possible(des):

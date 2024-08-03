@@ -31,7 +31,7 @@ def finir_partie():
 
 
 def tirage(n: int) -> list[int]:
-    """Renvoie une liste de n entiers dans [1,6]"""
+    """Renvoie une liste de `n` entiers dans [1,6]"""
     des_tires = []
     for _ in range(n):
         des_tires.append(randint(1, 6))
@@ -50,13 +50,31 @@ def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[in
 
 
 def get_veut_s_arreter() -> bool:
+    """Renvoie un booléen indiquant si le joueur veut s'arrêter"""
     if input("Voulez-vous vous arrêter là? (y/N)\n>>> ") in ("y","Y"):
         return True
     return False
 
 
-def enregistrement_score(joueur: Joueur, iTour: int):
-    pass
+def enregistrement_score(joueur: Joueur, des: list[int]):
+    print("Que voulez-vous faire?")
+    coups_possibles = list(filter(lambda c:joueur.scores[c.nom] is None,Coup.coups_possibles(des)))
+    for i in range(len(coups_possibles)):
+        print(f"{i+1}. {coups_possibles[i]}")
+    print(f"{len(coups_possibles)+1}. je barre qqch")
+    reponse = int(input(">>> "))
+    if 1<=reponse<=len(coups_possibles):
+        joueur.scores[coups_possibles[reponse]] = coups_possibles[reponse].score(des)
+    elif reponse == len(coups_possibles)+1:
+        print("Vous voulez barrer...")
+        coups_barrables = list(filter(lambda c:joueur.scores[c.nom] is None,Coup.coups))
+        for i in range(len(coups_barrables)):
+            print(f"{i+1}. {coups_barrables[i]}")
+        reponse = int(input(">>> "))
+        if 1<=reponse<=len(coups_barrables):
+            joueur.scores[coups_barrables[reponse]] = 0
+    else:
+        print("\033[1;31;1mChoix impossible, veuillez réessayer\033[1;0m")
 
 
 def jouer(iTour: int, joueur: Joueur) -> None:
@@ -69,7 +87,7 @@ def jouer(iTour: int, joueur: Joueur) -> None:
             des_conserves = get_des_conserves(des_conserves, des_tires)
         else:
             # Le joueur s'arrête et indique où il veut mettre les points ou s'il veut barrer
-            enregistrement_score(joueur, iTour)
+            enregistrement_score(joueur, des_tires + des_conserves)
             return None
 
 
