@@ -3,6 +3,29 @@ import copy
 NB_TOURS = 13
 
 
+class Joueur:
+    def __init__(self, nom) -> None:
+        self.nom = nom
+        self.scores = {k: None for k in restrictions.keys()}
+        self.score_inf = 0
+        self.score_sup = 0
+        self.bonus = False
+        self.score_total = 0
+
+    def calculer_scores(self):
+        self.score_sup = sum(v for k, v in self.scores.items() if k.isdigit())
+        if self.score_sup >= 63:
+            self.bonus = True
+        self.score_inf = sum(v for k, v in self.scores.items() if not k.isdigit())
+        self.score_total = self.score_sup + self.bonus * self.score_inf + self.score_inf
+
+    def __str__(self) -> str:
+        return self.nom
+
+    def __repr__(self) -> str:
+        return str(self)
+
+
 def est_brelan(des: list[str]) -> bool:
     _des = [d for d in des]
     _des.sort()
