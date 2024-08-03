@@ -36,7 +36,7 @@ def tirage(n: int) -> list[int]:
     for _ in range(n):
         des_tires.append(randint(1, 6))
     return des_tires
-
+bla=1
 
 def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[int]:
     """Renvoie la liste de dés à garder choisis par le joueur"""
