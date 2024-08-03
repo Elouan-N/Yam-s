@@ -6,7 +6,9 @@ NB_TOURS = 13
 def est_brelan(des: list[str]) -> bool:
     _des = [d for d in des]
     _des.sort()
-    _des.sort(key=lambda x: _des.count(x), reverse=True)
+    print(_des)
+    _des.sort(key=lambda x: des.count(x), reverse=True)
+    print(_des)
     return _des[2] == _des[0]
 
 
@@ -38,7 +40,7 @@ restrictions = {
     "brelan": {"type": "variable", "function": est_brelan},
     "carré": {"type": "variable", "function": est_carre},
     "full": {"type": "variable", "function": est_full},
-    "petite_suite": {"type": "contains", "expr": ["1234", "2345", "3456"]},
+    "petite_suite": {"type": "contains", "contents": ["1234", "2345", "3456"]},
     "grande_suite": {"type": "contains", "contents": ["12345", "23456"]},
     "yams": {"type": "variable", "function": est_yams},
     "chance": {"type": "any"},
