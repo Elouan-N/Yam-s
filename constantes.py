@@ -2,6 +2,7 @@ import copy
 
 NB_TOURS = 13
 
+joueurs = []
 
 class Joueur:
     def __init__(self, nom) -> None:
@@ -93,3 +94,4 @@ def est_inclus(a: list, b: list) -> bool:
             _b.pop(_b.index(e))
         else:
             return False
+    return True

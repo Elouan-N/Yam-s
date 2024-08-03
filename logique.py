@@ -40,9 +40,9 @@ class Coup:
     def coups_possibles(cls, des: list[int]) -> list['Coup']:
         c_pos = []
         for c in Coup.coups:
-            if c.possible(des):
+            if c.est_possible(des):
                 c_pos.append(c)
-        return c
+        return c_pos
 
     def __str__(self) -> str:
         return self.nom

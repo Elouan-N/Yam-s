@@ -3,7 +3,6 @@ from graphisme import *
 from logique import *
 from random import randint
 
-joueurs = []
 
 
 def init_partie():
@@ -52,7 +51,7 @@ def enregistrement_score(joueur: Joueur, des: list[int]):
     print(f"{len(coups_possibles)+1}. je barre qqch")
     reponse = int(input(">>> "))
     if 1<=reponse<=len(coups_possibles):
-        joueur.scores[coups_possibles[reponse]] = coups_possibles[reponse].score(des)
+        joueur.scores[coups_possibles[reponse-1]] = coups_possibles[reponse-1].score(des)
     elif reponse == len(coups_possibles)+1:
         print("Vous voulez barrer...")
         coups_barrables = list(filter(lambda c:joueur.scores[c.nom] is None,Coup.coups))
@@ -66,6 +65,8 @@ def enregistrement_score(joueur: Joueur, des: list[int]):
 
 
 def jouer(iTour: int, joueur: Joueur) -> None:
+    print(f"\n\033[1;36;1mA {joueur.nom} de jouer\033[1;0m")
+    print(f"{iTour+1}{'er' if iTour==0 else 'ème'} tour")
     des_conserves = []
     for iLance in range(3):
         des_tires = tirage(5 - len(des_conserves))

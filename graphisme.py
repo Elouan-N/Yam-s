@@ -7,7 +7,10 @@ def afficher_des(des_conserves: list[int], des_tires: list[int]) -> None:
 
 
 def init_graphisme():
-    pass
+    # on créé les joueurs
+    n = int(input("Entrez le nombre de joueurs: "))
+    for i in range(n):
+        joueurs.append(Joueur(input(f"Nom du {i+1}{'er' if i==0 else 'ème'} joueur: ")))
 
 
 def afficher_podium(joueurs: list[Joueur]) -> None:
