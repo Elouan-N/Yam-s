@@ -1,7 +1,6 @@
-from constantes import *
-from graphisme import *
+from base import *
+from ui import *
 from logique import *
-from random import randint
 
 
 def init_partie() -> None:
@@ -21,7 +20,7 @@ def tirage(n: int) -> list[int]:
     """Renvoie une liste de `n` entiers dans [1,6] correspondant donc à un tirage de dés"""
     des_tires = []
     for _ in range(n):
-        des_tires.append(randint(1, 6))
+        des_tires.append(random.randint(1, 6))
     return des_tires
 
 

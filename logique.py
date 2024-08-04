@@ -1,4 +1,4 @@
-from constantes import *
+from base import *
 
 
 class Coup:
@@ -37,7 +37,7 @@ class Coup:
                 return self._score["value"]
 
     @classmethod
-    def coups_possibles(cls, des: list[int]) -> list['Coup']:
+    def coups_possibles(cls, des: list[int]) -> list["Coup"]:
         c_pos = []
         for c in Coup.coups:
             if c.est_possible(des):

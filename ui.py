@@ -1,4 +1,4 @@
-from constantes import *
+from base import *
 
 
 def afficher_des(des_conserves: list[int], des_tires: list[int]) -> None:
