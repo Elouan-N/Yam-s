@@ -1,6 +1,9 @@
 import copy
+import random
+
 
 NB_TOURS = 13
+AUTOMATIC = False  # A des fins de test, pour jouer aléatoirement
 
 joueurs = []
 
@@ -47,6 +50,27 @@ def print_x(s: str, **kwargs) -> None:
     print(gs)
 
 
+def get_user_type(t: object, possible: list[object], **kwargs) -> object:
+    """Prend en paramètre une classe `t` et essaie de cast la chaîne de caractères entrée par le joueur en ce type-là"""
+    prompt = ">>> "
+    for k, v in kwargs.items():
+        if k != "prompt":
+            raise ValueError(f"Unknown keyword argument '{k}'")
+        elif type(v) != str:
+            raise TypeError("Prompt must be a string")
+        else:
+            prompt = v
+    if AUTOMATIC:
+        return random.choice(possible)
+    else:
+        s = input(prompt)
+    try:
+        return t(s)
+    except:
+        print_x(f"Error: this is not a {t}", fgcol="white", bgcol="red")
+        return get_user_type(t, possible, **kwargs)
+
+
 class Joueur:
     def __init__(self, nom) -> None:
         self.nom = nom
@@ -73,23 +97,21 @@ class Joueur:
 def est_brelan(des: list[str]) -> bool:
     _des = [d for d in des]
     _des.sort()
-    print(_des)
     _des.sort(key=lambda x: des.count(x), reverse=True)
-    print(_des)
     return _des[2] == _des[0]
 
 
 def est_carre(des: list[str]) -> bool:
     _des = [d for d in des]
     _des.sort()
-    _des.sort(key=lambda x: _des.count(x), reverse=True)
+    _des.sort(key=lambda x: des.count(x), reverse=True)
     return _des[3] == _des[0]
 
 
 def est_full(des: list[str]) -> bool:
     _des = [d for d in des]
     _des.sort()
-    _des.sort(key=lambda x: _des.count(x), reverse=True)
+    _des.sort(key=lambda x: des.count(x), reverse=True)
     return _des[2] == _des[0] and _des[3] == _des[4]
 
 

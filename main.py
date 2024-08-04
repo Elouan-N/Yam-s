@@ -41,7 +41,11 @@ def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[in
 
 def get_veut_s_arreter() -> bool:
     """Renvoie un booléen indiquant si le joueur veut s'arrêter"""
-    if input("Voulez-vous vous arrêter là? (y/N)\n>>> ") in ("y", "Y"):
+    print("Voulez-vous vous arrêter là? (y/N)")
+    if get_user_type(
+        str,
+        ["y", "n"],
+    ) in ("y", "Y"):
         return True
     return False
 
@@ -66,13 +70,23 @@ def enregistrement_score(joueur: Joueur, des: list[int]) -> None:
             print("%2d. %12s : %2s" % (i + 1, Coup.coups[i], sc))
 
     print(f"{len(Coup.coups)+1}. Barrer quelque chose")
-    reponse = int(input(">>> "))
+    reponse = get_user_type(
+        int,
+        list(
+            filter(
+                lambda i: Coup.coups[i - 1] in coups_possibles,
+                range(1, len(Coup.coups) + 1),
+            )
+        ),
+    )
     if 1 <= reponse <= len(Coup.coups):
         # Le choix est existant, il faut vérifier qu'il est valide
         if joueur.scores[Coup.coups[reponse - 1].nom] is None and Coup.coups[
             reponse - 1
         ].est_possible(des):
-            joueur.scores[Coup.coups[reponse - 1]] = Coup.coups[reponse - 1].score(des)
+            joueur.scores[Coup.coups[reponse - 1].nom] = Coup.coups[reponse - 1].score(
+                des
+            )
         else:
             print("\033[1;31mChoix impossible, veuillez réessayer\033[0m")
             enregistrement_score(joueur, des)
@@ -83,16 +97,24 @@ def enregistrement_score(joueur: Joueur, des: list[int]) -> None:
         )
         for i in range(len(coups_barrables)):
             print(f"{i+1}. {coups_barrables[i]}")
-        reponse = int(input(">>> "))
+        reponse = get_user_type(
+            int,
+            list(
+                filter(
+                    lambda i: Coup.coups[i - 1] in coups_barrables,
+                    range(1, len(Coup.coups) + 1),
+                )
+            ),
+        )
         if 1 <= reponse <= len(coups_barrables):
-            joueur.scores[coups_barrables[reponse]] = 0
+            joueur.scores[coups_barrables[reponse - 1].nom] = 0
     else:
         print_x("Choix impossible, veuillez réessayer", fgcol="red", bold=True)
         enregistrement_score(joueur, des)
 
 
 def jouer(iTour: int, joueur: Joueur) -> None:
-    print(f"\n\033[1;36;1mA {joueur.nom} de jouer\033[0m")
+    print(f"\n\033[1;36;1mÀ {joueur.nom} de jouer\033[0m")
     print(f"{iTour+1}{'er' if iTour==0 else 'ème'} tour")
     des_conserves = []
     for iLance in range(3):
