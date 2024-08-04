@@ -4,20 +4,21 @@ from logique import *
 from random import randint
 
 
-
-def init_partie():
+def init_partie() -> None:
+    """Fonction d'initialisation de la partie"""
     init_logique()
     init_graphisme()
 
 
-def finir_partie():
+def finir_partie() -> None:
+    """Fonction de terminaison de la partie"""
     for j in joueurs:
         j.calculer_scores()
     afficher_podium(joueurs)
 
 
 def tirage(n: int) -> list[int]:
-    """Renvoie une liste de `n` entiers dans [1,6]"""
+    """Renvoie une liste de `n` entiers dans [1,6] correspondant donc à un tirage de dés"""
     des_tires = []
     for _ in range(n):
         des_tires.append(randint(1, 6))
@@ -31,8 +32,10 @@ def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[in
             map(int, input("Quels dés voulez-vous conserver?\n>>> ").split())
         ),
         des_conserves + des_tires,
-    ):
-        print("\033[1;31;1mChoix impossible, veuillez réessayer\033[1;0m")
+    ):  # Tant que la liste des dés choisis à conserver n'est pas incluse dans la liste des dés
+        print(
+            "\033[1;31mChoix impossible, veuillez réessayer\033[0m"
+        )  # Afficher un message d'erreur
     return des_conserves_choisis
 
 
@@ -43,29 +46,53 @@ def get_veut_s_arreter() -> bool:
     return False
 
 
-def enregistrement_score(joueur: Joueur, des: list[int]):
+def enregistrement_score(joueur: Joueur, des: list[int]) -> None:
+    """Fonction déterminant dans quelle case le joueur veut enregistrer"""
+    coups_possibles = list(
+        filter(lambda c: joueur.scores[c.nom] is None, Coup.coups_possibles(des))
+    )
     print("Que voulez-vous faire?")
-    coups_possibles = list(filter(lambda c:joueur.scores[c.nom] is None,Coup.coups_possibles(des)))
-    for i in range(len(coups_possibles)):
-        print(f"{i+1}. {coups_possibles[i]}")
-    print(f"{len(coups_possibles)+1}. je barre qqch")
+    for i in range(len(Coup.coups)):
+        match joueur.scores[Coup.coups[i].nom]:
+            case 0:
+                sc = "x"
+            case None:
+                sc = ""
+            case k:
+                sc = str(k)
+        if Coup.coups[i] not in coups_possibles:
+            print_x("%2d. %12s : %2s" % (i + 1, Coup.coups[i], sc), fgcol="dark grey")
+        else:
+            print("%2d. %12s : %2s" % (i + 1, Coup.coups[i], sc))
+
+    print(f"{len(Coup.coups)+1}. Barrer quelque chose")
     reponse = int(input(">>> "))
-    if 1<=reponse<=len(coups_possibles):
-        joueur.scores[coups_possibles[reponse-1]] = coups_possibles[reponse-1].score(des)
-    elif reponse == len(coups_possibles)+1:
+    if 1 <= reponse <= len(Coup.coups):
+        # Le choix est existant, il faut vérifier qu'il est valide
+        if joueur.scores[Coup.coups[reponse - 1].nom] is None and Coup.coups[
+            reponse - 1
+        ].est_possible(des):
+            joueur.scores[Coup.coups[reponse - 1]] = Coup.coups[reponse - 1].score(des)
+        else:
+            print("\033[1;31mChoix impossible, veuillez réessayer\033[0m")
+            enregistrement_score(joueur, des)
+    elif reponse == len(Coup.coups) + 1:
         print("Vous voulez barrer...")
-        coups_barrables = list(filter(lambda c:joueur.scores[c.nom] is None,Coup.coups))
+        coups_barrables = list(
+            filter(lambda c: joueur.scores[c.nom] is None, Coup.coups)
+        )
         for i in range(len(coups_barrables)):
             print(f"{i+1}. {coups_barrables[i]}")
         reponse = int(input(">>> "))
-        if 1<=reponse<=len(coups_barrables):
+        if 1 <= reponse <= len(coups_barrables):
             joueur.scores[coups_barrables[reponse]] = 0
     else:
-        print("\033[1;31;1mChoix impossible, veuillez réessayer\033[1;0m")
+        print_x("Choix impossible, veuillez réessayer", fgcol="red", bold=True)
+        enregistrement_score(joueur, des)
 
 
 def jouer(iTour: int, joueur: Joueur) -> None:
-    print(f"\n\033[1;36;1mA {joueur.nom} de jouer\033[1;0m")
+    print(f"\n\033[1;36;1mA {joueur.nom} de jouer\033[0m")
     print(f"{iTour+1}{'er' if iTour==0 else 'ème'} tour")
     des_conserves = []
     for iLance in range(3):

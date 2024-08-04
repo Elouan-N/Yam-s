@@ -4,6 +4,49 @@ NB_TOURS = 13
 
 joueurs = []
 
+
+fgcolors = {
+    "black": 30,
+    "red": 31,
+    "green": 32,
+    "yellow": 33,
+    "blue": 34,
+    "magenta": 35,
+    "cyan": 36,
+    "light grey": 37,
+    "dark grey": 90,
+    "white": 97,
+}
+
+bgcolors = {k: v + 10 for k, v in fgcolors.items()}
+
+
+def print_x(s: str, **kwargs) -> None:
+    fgcol = kwargs["fgcol"] if kwargs.get("fgcol") is not None else None
+    bgcol = kwargs["bgcol"] if kwargs.get("bgcol") is not None else None
+    bold = kwargs["bold"] if kwargs.get("bold") is not None else False
+    italic = kwargs["italic"] if kwargs.get("italic") is not None else False
+    underline = kwargs["underline"] if kwargs.get("underline") is not None else False
+    blink = kwargs["blink"] if kwargs.get("blink") is not None else False
+
+    modfs = []
+    if fgcol is not None:
+        modfs.append(fgcolors[fgcol])
+    if bgcol is not None:
+        modfs.append(fgcolors[bgcol])
+    if bold:
+        modfs.append(1)
+    if italic:
+        modfs.append(3)
+    if underline:
+        modfs.append(4)
+    if blink:
+        modfs.append(5)
+    modf = ";".join(list(map(str, modfs)))
+    gs = "\033[" + modf + "m" + s + "\033[0m"
+    print(gs)
+
+
 class Joueur:
     def __init__(self, nom) -> None:
         self.nom = nom
@@ -64,8 +107,8 @@ restrictions = {
     "brelan": {"type": "variable", "function": est_brelan},
     "carré": {"type": "variable", "function": est_carre},
     "full": {"type": "variable", "function": est_full},
-    "petite_suite": {"type": "contains", "contents": ["1234", "2345", "3456"]},
-    "grande_suite": {"type": "contains", "contents": ["12345", "23456"]},
+    "petite suite": {"type": "contains", "contents": ["1234", "2345", "3456"]},
+    "grande suite": {"type": "contains", "contents": ["12345", "23456"]},
     "yams": {"type": "variable", "function": est_yams},
     "chance": {"type": "any"},
 }
@@ -80,8 +123,8 @@ scores = {
     "brelan": {"type": "somme"},
     "carré": {"type": "somme"},
     "full": {"type": "fixed", "value": 25},
-    "petite_suite": {"type": "fixed", "value": 30},
-    "grande_suite": {"type": "fixed", "value": 40},
+    "petite suite": {"type": "fixed", "value": 30},
+    "grande suite": {"type": "fixed", "value": 40},
     "yams": {"type": "fixed", "value": 50},
     "chance": {"type": "somme"},
 }
