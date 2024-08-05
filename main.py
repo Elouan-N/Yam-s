@@ -56,7 +56,7 @@ def enregistrement_score(joueur: Joueur, des: list[int]) -> None:
     for i in range(len(Coup.coups)):
         match joueur.scores[Coup.coups[i].nom]:
             case 0:
-                sc = "x"
+                sc = "X"
             case None:
                 sc = ""
             case k:
@@ -85,7 +85,7 @@ def enregistrement_score(joueur: Joueur, des: list[int]) -> None:
                 des
             )
         else:
-            print("\033[1;31mChoix impossible, veuillez réessayer\033[0m")
+            print_x("Choix impossible, veuillez réessayer", fgcol = "red", bold = True)
             enregistrement_score(joueur, des)
     elif reponse == len(Coup.coups) + 1:
         print("Vous voulez barrer...")
@@ -111,8 +111,11 @@ def enregistrement_score(joueur: Joueur, des: list[int]) -> None:
 
 
 def jouer(iTour: int, joueur: Joueur) -> None:
-    print(f"\n\033[1;36;1mÀ {joueur.nom} de jouer\033[0m")
-    print(f"{iTour+1}{'er' if iTour==0 else 'ème'} tour")
+    print()
+    print_x(f"À {joueur.nom} de jouer", fgcol = "blue", bold = True)
+    print_x(f"{iTour+1}{'er' if iTour==0 else 'ème'} tour", fgcol = "blue", bold = True)
+    print()
+    afficher_feuille(joueur)
     des_conserves = []
     for iLance in range(3):
         des_tires = tirage(5 - len(des_conserves))

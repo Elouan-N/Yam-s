@@ -7,6 +7,11 @@ AUTOMATIC = False  # A des fins de test, pour jouer aléatoirement
 
 joueurs = []
 
+# caractères de boite
+ASCII_VERTICAL = "\u2551"
+ASCII_HORIZONTAL = "\u2550"
+ASCII_BLHC = "\u255A"
+ASCII_BRHC = "\u255D"
 
 fgcolors = {
     "black": 30,
@@ -25,13 +30,14 @@ bgcolors = {k: v + 10 for k, v in fgcolors.items()}
 
 
 def print_x(s: str, **kwargs) -> None:
+    own_kwargs = ["fgcol","bgcol","bold","italic","undeline","blink"]
     fgcol = kwargs["fgcol"] if kwargs.get("fgcol") is not None else None
     bgcol = kwargs["bgcol"] if kwargs.get("bgcol") is not None else None
     bold = kwargs["bold"] if kwargs.get("bold") is not None else False
     italic = kwargs["italic"] if kwargs.get("italic") is not None else False
     underline = kwargs["underline"] if kwargs.get("underline") is not None else False
     blink = kwargs["blink"] if kwargs.get("blink") is not None else False
-
+    rem_kwargs = {k:v for k,v in kwargs.items() if k not in own_kwargs}
     modfs = []
     if fgcol is not None:
         modfs.append(fgcolors[fgcol])
@@ -47,7 +53,7 @@ def print_x(s: str, **kwargs) -> None:
         modfs.append(5)
     modf = ";".join(list(map(str, modfs)))
     gs = "\033[" + modf + "m" + s + "\033[0m"
-    print(gs)
+    print(gs,**rem_kwargs)
 
 
 def get_user_type(t: object, possible: list[object], **kwargs) -> object:
