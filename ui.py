@@ -2,8 +2,10 @@ from base import *
 
 
 def afficher_des(des_conserves: list[int], des_tires: list[int]) -> None:
-    print("Dés conservés:", " ".join(map(str, sorted(des_conserves))))
-    print("Dés tirés:", " ".join(map(str, sorted(des_tires))))
+    print("Dés conservés:", end = " ")
+    print_x(" ".join(map(str, sorted(des_conserves))), fgcol = "magenta", bold = True)
+    print("Dés tirés:", end = " ")
+    print_x(" ".join(map(str, sorted(des_tires))), fgcol = "magenta", bold = True)
 
 
 def init_graphisme():
