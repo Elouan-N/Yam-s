@@ -18,3 +18,8 @@ def afficher_podium(joueurs: list[Joueur]) -> None:
     l = sorted(joueurs, key=lambda x: x.score_total, reverse=True)
     for i in range(len(joueurs)):
         print(f"{i+1}. {l[i]} ({l[i].score_total} pts)")
+
+def get_des():
+    return list(
+            map(int, input("Quels dés voulez-vous conserver?\n>>> ").split())
+        )

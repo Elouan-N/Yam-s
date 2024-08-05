@@ -27,9 +27,7 @@ def tirage(n: int) -> list[int]:
 def get_des_conserves(des_conserves: list[int], des_tires: list[int]) -> list[int]:
     """Renvoie la liste de dés à garder choisis par le joueur"""
     while not est_inclus(
-        des_conserves_choisis := list(
-            map(int, input("Quels dés voulez-vous conserver?\n>>> ").split())
-        ),
+        des_conserves_choisis := get_des(),
         des_conserves + des_tires,
     ):  # Tant que la liste des dés choisis à conserver n'est pas incluse dans la liste des dés
         print(
