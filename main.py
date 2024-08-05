@@ -58,7 +58,7 @@ def enregistrement_score(joueur: Joueur, des: list[int]) -> None:
     for i in range(len(Coup.coups)):
         match joueur.scores[Coup.coups[i].nom]:
             case 0:
-                sc = "x"
+                sc = "X"
             case None:
                 sc = ""
             case k:
@@ -117,6 +117,7 @@ def jouer(iTour: int, joueur: Joueur) -> None:
     print_x(f"À {joueur.nom} de jouer", fgcol = "blue", bold = True)
     print_x(f"{iTour+1}{'er' if iTour==0 else 'ème'} tour", fgcol = "blue", bold = True)
     print()
+    afficher_feuille(joueur)
     des_conserves = []
     for iLance in range(3):
         des_tires = tirage(5 - len(des_conserves))
