@@ -18,6 +18,7 @@ def init_graphisme():
 
 
 def afficher_podium(joueurs: list[Joueur]) -> None:
+    print_x("PODIUM", fgcol = "green", bold = True)
     l = sorted(joueurs, key=lambda x: x.score_total, reverse=True)
     for i in range(len(joueurs)):
         print(f"{i+1}. {l[i]} ({l[i].score_total} pts)")
