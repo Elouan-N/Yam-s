@@ -36,8 +36,8 @@ class Coup:
             case "fixed":
                 return self._score["value"]
 
-    @classmethod
-    def coups_possibles(cls, des: list[int]) -> list["Coup"]:
+    @staticmethod
+    def coups_possibles(des: list[int]) -> list["Coup"]:
         c_pos = []
         for c in Coup.coups:
             if c.est_possible(des):
@@ -50,6 +50,46 @@ class Coup:
     def __repr__(self) -> str:
         return str(self)
 
+class Joueur:
+    def __init__(self, nom) -> None:
+        self.nom = nom
+        self.scores = {k: None for k in restrictions.keys()}
+        self.score_inf = 0
+        self.score_sup = 0
+        self.bonus = False
+        self.score_total = 0
+
+    def calculer_scores(self):
+        self.score_sup = sum(v for k, v in self.scores.items() if k.isdigit())
+        if self.score_sup >= 63:
+            self.bonus = True
+        self.score_inf = sum(v for k, v in self.scores.items() if not k.isdigit())
+        self.score_total = self.score_sup + self.bonus * self.score_inf + self.score_inf
+
+    def __str__(self) -> str:
+        return self.nom
+
+    def __repr__(self) -> str:
+        return str(self)
+
+class IA(Joueur):
+    def __init__(self,nom,niveau = 0):
+        super(IA,self).__init__(nom)
+        self.niveau = niveau
+        
+    def meilleur_coup(self, des :list[int]) -> Coup:
+        return max(Coup.coups_possibles(des),key=lambda c:c.score(des))
+    
+    def meilleure_action(self, des :list[int], iLance :int) -> tuple[str,str] | tuple[str,int] | tuple[str,int,int]:
+        """Input:
+        - liste des 5 dés
+        - indice du tirage (entre 0 et 2)
+        
+        Output:
+        - un tuple qui contient les réponses dans l'ordre
+            - `'y'` ou `'n'` (si on veut s'arrêter)
+            - l'indice de coup à marquer (int) ou les dés a conserver (str)
+            - si on doit barrer, l'indice du coup à barrer(int)"""
 
 def init_logique():
     # On crée les instances de coup
