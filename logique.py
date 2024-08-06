@@ -90,6 +90,8 @@ class IA(Joueur):
             - `'y'` ou `'n'` (si on veut s'arrêter)
             - l'indice de coup à marquer (int) ou les dés a conserver (str)
             - si on doit barrer, l'indice du coup à barrer(int)"""
+        if iLance == 2:
+            pass
 
 def init_logique():
     # On crée les instances de coup
