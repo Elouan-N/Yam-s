@@ -12,6 +12,8 @@ ASCII_VERTICAL = "\u2551"
 ASCII_HORIZONTAL = "\u2550"
 ASCII_BLHC = "\u255A"
 ASCII_BRHC = "\u255D"
+ASCII_TLHC = "\u2554"
+ASCII_TRHC = "\u2557"
 
 fgcolors = {
     "black": 30,

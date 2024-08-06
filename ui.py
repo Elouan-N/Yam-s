@@ -1,7 +1,6 @@
 from base import *
 from logique import *
 
-
 def afficher_des(des_conserves: list[int], des_tires: list[int]) -> None:
     print("Dés conservés:", end=" ")
     print_x(" ".join(map(str, sorted(des_conserves))), fgcol="magenta", bold=True)
@@ -18,10 +17,19 @@ def init_graphisme():
 
 
 def afficher_podium(joueurs: list[Joueur]) -> None:
-    print_x("PODIUM", fgcol="green", bold=True)
     l = sorted(joueurs, key=lambda x: x.score_total, reverse=True)
+    l += ["",""]
+    print_x("PODIUM", fgcol="green", bold=True)
+    print()
+    print_x("             %7.7s             " % (l[0]), fgcol="green", bold=True)
+    print_x("   %7.7s ╔═════════╗ %7.7s  " % (l[1], l[2]), fgcol="green", bold=True)
+    print_x(" ╔═════════╣    1    ╠═════════╗", fgcol="green", bold=True)
+    print_x(" ║    2    ║         ║    3    ║", fgcol="green", bold=True)
+    print()
+    print_x("SCORES", fgcol="green", bold=True)
+    print()
     for i in range(len(joueurs)):
-        print(f"{i+1}. {l[i]} ({l[i].score_total} pts)")
+        print_x(f"{i+1}. {l[i]} ({l[i].score_total} pts)", fgcol="green", bold=True)
 
 
 def afficher_feuille(joueur: Joueur) -> None:
