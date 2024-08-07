@@ -1,5 +1,6 @@
 from base import *
 import itertools
+import tqdm
 
 class Coup:
     coups = []  # Tous les coups possibles
@@ -79,7 +80,7 @@ class IA(Joueur):
         self.niveau = niveau
    
     def meilleur_coup(self, des :list[int]) -> Coup | None:
-        c_pos = list(filter(self. Coup.coups_possibles(des)))
+        c_pos = list(filter(lambda c:self.scores[c.nom] is None, Coup.coups_possibles(des)))
         if c_pos != []:
             return max(c_pos,key=lambda c:c.score(des))
     
@@ -130,4 +131,6 @@ def init_logique():
 if __name__ == "__main__":
     init_logique()
     ordi1 = IA("ordi1")
-    print(ordi1.calculer_score_espere_et_des_a_garder([1,2,3,5,6],2))
+    combinaison = [1,2,3,4,5]
+    print(combinaison)
+    print(ordi1.calculer_score_espere_et_des_a_garder(combinaison,2))
