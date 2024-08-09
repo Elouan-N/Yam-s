@@ -1,6 +1,8 @@
 from base import *
 import itertools
 import tqdm
+import time
+
 
 class Coup:
     coups = []  # Tous les coups possibles
@@ -51,6 +53,7 @@ class Coup:
     def __repr__(self) -> str:
         return str(self)
 
+
 class Joueur:
     def __init__(self, nom) -> None:
         self.nom = nom
@@ -75,62 +78,83 @@ class Joueur:
 
 
 class IA(Joueur):
-    def __init__(self,nom :str,niveau = 0):
-        super(IA,self).__init__(nom)
+    def __init__(self, nom: str, niveau=0):
+        super(IA, self).__init__(nom)
         self.niveau = niveau
-   
-    def meilleur_coup(self, des :list[int]) -> Coup | None:
-        c_pos = list(filter(lambda c:self.scores[c.nom] is None, Coup.coups_possibles(des)))
+
+    def meilleur_coup(self, des: list[int]) -> Coup | None:
+        c_pos = list(
+            filter(lambda c: self.scores[c.nom] is None, Coup.coups_possibles(des))
+        )
         if c_pos != []:
-            return max(c_pos,key=lambda c:c.score(des))
-    
-    def calculer_score_espere_et_des_a_garder(self,des :list[int],nbLancerRestants : 0 | 1 | 2):
-        
+            return max(c_pos, key=lambda c: c.score(des))
+
+    def calculer_score_espere_et_des_a_garder(
+        self, des: list[int], nbLancerRestants: 0 | 1 | 2
+    ):
+
         if nbLancerRestants == 0:
-            return (des,c.score(des) if (c:=self.meilleur_coup(des)) is not None else 0)
+            return (
+                des,
+                c.score(des) if (c := self.meilleur_coup(des)) is not None else 0,
+            )
         # liste des couples (dés gardés, score obtenu en moyenne avec ces dés)
-        scores_obtenus : list[tuple[list[int],float]] = []
-        
+        scores_obtenus: list[tuple[list[int], float]] = []
+
         # Etape 1: je constitue la liste des liste de dés que je peux garder et supprime les doublons
-        for i in range(5,-1,-1):
+        for i in range(5, -1, -1):
             # On calcule les sous-ensembles de taille `i` de des et on supprime les doublons
-            des_a_garder_poss : list[list[int]] = list(map(list,set(itertools.combinations(des,i))))
-            
+            des_a_garder_poss: list[list[int]] = list(
+                map(
+                    lambda l: sum([[i + 1] * l[i] for i in range(6)], start=[]),
+                    set(
+                        map(
+                            lambda l: tuple([l.count(i + 1) for i in range(6)]),
+                            itertools.combinations(des, i),
+                        )
+                    ),
+                )
+            )
             # Pour chacun, je simule tous les tirages possibles des autres dés et pareil une deuxième fois si je suis au premier lancer
-            nouveaux_des = list(map(list,itertools.combinations_with_replacement(range(1,7),5-i)))
+            nouveaux_des = list(
+                map(list, itertools.combinations_with_replacement(range(1, 7), 5 - i))
+            )
             for dg in des_a_garder_poss:
                 # Je calcule le score obtenu à l'extrémité de chaque branche et je moyenne en remontant
                 score = 0
                 nb_nd = 0
                 for nd in nouveaux_des:
                     nb_nd += 1
-                    score += self.calculer_score_espere_et_des_a_garder(dg+nd,nbLancerRestants-1)[1]
+                    score += self.calculer_score_espere_et_des_a_garder(
+                        dg + nd, nbLancerRestants - 1
+                    )[1]
                 score /= nb_nd
-                scores_obtenus.append((list(dg),score))
-        return max(scores_obtenus,key=lambda x:x[1])
-        
-        
-        
-    def meilleure_action(self, des :list[int], iLance :int):
+                scores_obtenus.append((list(dg), score))
+        return max(scores_obtenus, key=lambda x: x[1])
+
+    def meilleure_action(self, des: list[int], iLance: int):
         """Input:
         - liste des 5 dés
         - indice du tirage (entre 0 et 2)
-        
+
         Output:
         - les réponses dans l'ordre
             - `'y'` ou `'n'` (si on veut s'arrêter)
             - l'indice de coup à marquer (int) ou les dés a conserver (str)
             - si on doit barrer, l'indice du coup à barrer(int)"""
-        
+
 
 def init_logique():
     # On crée les instances de coup
     for k, restr in restrictions.items():
         Coup(k, restr, scores[k])
 
+
 if __name__ == "__main__":
     init_logique()
     ordi1 = IA("ordi1")
-    combinaison = [1,2,3,4,5]
+    combinaison = [1, 1, 1, 1, 2]
     print(combinaison)
-    print(ordi1.calculer_score_espere_et_des_a_garder(combinaison,2))
+    temps_a = time.monotonic()
+    print(ordi1.calculer_score_espere_et_des_a_garder(combinaison, 2))
+    print(f"temps: {round(time.monotonic() - temps_a, 1)} sec")
