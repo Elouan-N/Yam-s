@@ -7,6 +7,7 @@ AUTOMATIC = False  # A des fins de test, pour jouer aléatoirement
 
 STOP = False  # Vrai quand le jeu est fini
 MODFS = False  # Variable utilisée pour stocker, à chaque refresh, si il y a eu des modifications
+BD = None  # Boîte de dialogue
 
 joueurs = []
 
