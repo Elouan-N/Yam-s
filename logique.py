@@ -77,6 +77,46 @@ class Joueur:
         return str(self)
 
 
+probas = {}
+
+
+def init_probas():
+    """bla"""  # TODO
+    for i in range(1, 6):
+        l = sorted(
+            list(
+                map(
+                    lambda x: tuple(sorted(list(x))),
+                    itertools.product(range(1, 7), repeat=i),
+                )
+            )
+        )
+        n = len(l)
+        for e in l:
+            if probas.get(e) is None:
+                probas[e] = l.count(e) / n
+
+
+# class ArbreDecision:
+#     """Classe servant à représenter et stocker les décisions prises par l'IA"""
+
+#     etats = []
+
+#     def __init__(self, des: list[int], nbLancersRestants: 0 | 1 | 2):
+#         self.des = des
+#         self.nbLancersRestants
+#         self.fils = []
+#         self.score = None
+#         self.a_garder = (
+#             []
+#         )  # Dés à garder, après consultation de toutes les possibilités
+
+#     def __equal__(self, other):
+#         return self.nbLancersRestants == other.nbLancersRestants and sorted(
+#             self.des
+#         ) == sorted(other.des)
+
+
 class IA(Joueur):
     def __init__(self, nom: str, niveau=0):
         super(IA, self).__init__(nom)
@@ -91,8 +131,7 @@ class IA(Joueur):
 
     def calculer_score_espere_et_des_a_garder(
         self, des: list[int], nbLancerRestants: 0 | 1 | 2
-    ):
-
+    ) -> tuple[list[int], int | float]:
         if nbLancerRestants == 0:
             return (
                 des,
