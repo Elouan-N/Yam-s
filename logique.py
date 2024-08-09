@@ -116,9 +116,7 @@ class IA(Joueur):
                 )
             )
             # Pour chacun, je simule tous les tirages possibles des autres dés et pareil une deuxième fois si je suis au premier lancer
-            nouveaux_des = list(
-                map(list, itertools.combinations_with_replacement(range(1, 7), 5 - i))
-            )
+            nouveaux_des = list(map(list, itertools.product(range(1, 7), repeat=5 - i)))
             for dg in des_a_garder_poss:
                 # Je calcule le score obtenu à l'extrémité de chaque branche et je moyenne en remontant
                 score = 0
@@ -153,7 +151,7 @@ def init_logique():
 if __name__ == "__main__":
     init_logique()
     ordi1 = IA("ordi1")
-    combinaison = [1, 1, 1, 1, 2]
+    combinaison = [1, 1, 1, 1, 1]
     print(combinaison)
     temps_a = time.monotonic()
     print(ordi1.calculer_score_espere_et_des_a_garder(combinaison, 2))
