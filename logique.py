@@ -116,7 +116,9 @@ class IA(Joueur):
                 )
             )
             # Pour chacun, je simule tous les tirages possibles des autres dés et pareil une deuxième fois si je suis au premier lancer
-            nouveaux_des = list(map(list, itertools.product(range(1, 7), repeat=5 - i)))
+            nouveaux_des = list(
+                map(list, itertools.combinations_with_replacement(range(1, 7), 5 - i))
+            )
             for dg in des_a_garder_poss:
                 # Je calcule le score obtenu à l'extrémité de chaque branche et je moyenne en remontant
                 score = 0
