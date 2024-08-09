@@ -97,24 +97,24 @@ def init_probas():
                 probas[e] = l.count(e) / n
 
 
-class ArbreDecision:
-    """Classe servant à représenter et stocker les décisions prises par l'IA"""
+# class ArbreDecision:
+#     """Classe servant à représenter et stocker les décisions prises par l'IA"""
 
-    etats = []
+#     etats = []
 
-    def __init__(self, des: list[int], nbLancersRestants: 0 | 1 | 2):
-        self.des = des
-        self.nbLancersRestants
-        self.fils = []
-        self.score = None
-        self.a_garder = (
-            []
-        )  # Dés à garder, après consultation de toutes les possibilités
+#     def __init__(self, des: list[int], nbLancersRestants: 0 | 1 | 2):
+#         self.des = des
+#         self.nbLancersRestants
+#         self.fils = []
+#         self.score = None
+#         self.a_garder = (
+#             []
+#         )  # Dés à garder, après consultation de toutes les possibilités
 
-    def __equal__(self, other):
-        return self.nbLancersRestants == other.nbLancersRestants and sorted(
-            self.des
-        ) == sorted(other.des)
+#     def __equal__(self, other):
+#         return self.nbLancersRestants == other.nbLancersRestants and sorted(
+#             self.des
+#         ) == sorted(other.des)
 
 
 class IA(Joueur):
